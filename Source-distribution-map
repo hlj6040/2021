@@ -1,0 +1,35 @@
+import  pandas  as  pd
+from  pyecharts  import Map
+
+path = "C:\\Users\\submer\\Downloads\\python_cv\\中国省份代码.txt"
+list = []
+with  open(path, 'r',encoding='UTF-8') as  file:
+    list = file.read().split()
+    
+dict = {}
+for  i,j  in  enumerate(list[::2]):
+    dict[j] = list[2*i+1]
+    
+file_path = ".\\大一学生信息.xlsx"
+xlsx = pd.ExcelFile(file_path)
+data = pd.read_excel(xlsx, sheet_name = None,keep_default_na=False)
+arr = []
+for  i in  data.keys():
+    for j in data[i].身份证号:
+        if j == "":
+            continue
+        arr.append(dict[j[0:2]])
+        
+dict1 = {}
+for i in arr:
+    dict1[i] = dict1.get(i,0)+1
+    
+map = Map("2018计控生源分布",width = 1200, height = 1200)
+map.add("",
+        dict1.keys(), 
+        dict1.values(),
+        is_map_symbol_show = 0,
+        is_visualmap = 1,
+        visual_range = [1,300],
+        visual_range_color = ["#E5EAC1 ","#FFC300","#FF5733","#C70039","#900C3F","#581845"])
+map
